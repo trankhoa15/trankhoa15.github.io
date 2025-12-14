@@ -1,0 +1,117 @@
+.box1{
+    height:450px;
+    background: url('images/nền1.jpg') center/cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 45px;
+    font-weight: bold;
+    text-shadow: 0 4px 12px rgba(0,0,0,0.7);
+    margin:0;
+}
+.box2{
+    background-color: #FACE9C;
+    width:auto;
+    height:70px;
+}
+.anh {
+    width: 100%;
+    height: 100%;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+.userinfo{
+    position: fixed;
+    top: 10px;
+    right: 25px;
+}
+.userinfo button {
+    padding: 12px 25px;
+    cursor: pointer;
+    border-radius: 8px;
+    width: 180px;
+    outline: none;
+    background-color:#FACE9C ;
+    box-shadow:0 0 10px rgb(250, 175, 69) ;
+}
+.userinfo button a{
+    color: white;
+    font-size: 20.25px;
+}
+#menu li:nth-child(1) {
+    background-color:white;
+    text-align: center;
+    font-size: 17px;
+}
+#menu li:nth-child(2) {
+    background-color:white;
+    text-align: center;
+    font-size: 17px;
+}
+#menu li:hover{
+    color:red;
+    text-decoration:underline ;
+}
+#menu {
+    top: 100%;
+    left: 0;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 180px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    overflow: hidden;
+}
+.box3{
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    background: white;
+    padding: 15px 0;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    font-size: 25px;
+    font-family: Courier ;
+    font-weight: bold;
+    border-radius: 20px;
+}
+.boxdalat{
+    margin-top: 50px;
+    margin-left: 80px;
+    width:260px;
+    height:200px;
+    background: url('https://file.hstatic.net/1000379600/file/dia-diem-du-lich-da-lat-1_86dc1307188e41f284a1227679f089b4_grande.png') no-repeat center  ;
+    background-size:cover;
+    border-radius: 20px;
+    cursor: pointer;
+    transform: perspective(880px) rotateX(45deg) scale(0.7);
+    box-shadow: 0 25px 50px rgba(100,120,150,.3),
+        inset 0 -4px 8px rgba(255,255,255,0.6);
+    transition: transform 0.8s ease, box-shadow 0.6s ease;
+}
+.boxdalat:hover{
+    transform: rotateX(0deg) scale(1) translateY(-10px);
+    box-shadow:0 35px 70px rgba(80,100,130,.35),
+        inset 0 -6px 10px rgba(255,255,255, 0.7);
+}
+.boxchudalat{
+    margin-top: 10px;
+    margin-left:90px;
+    width:240px;
+    height:50px;
+    font-size:25px;
+    font-family: 'Andale Mono', monospace;
+    font-weight: bold;
+    display:inline-block;
+    padding: 20px;
+}
+.container {
+    display: flex; 
+    justify-content: flex-start;
+    flex-wrap: wrap; 
+}

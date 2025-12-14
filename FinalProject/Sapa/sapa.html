@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Travel Website - Sapa</title>
+<style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #eef6fa;
+        color: #00334e;
+    }
+    header {
+        background: url('https://i.pinimg.com/originals/cd/09/c4/cd09c4193c75425039f3266528e6b90e.jpg') center/cover;
+        height: 350px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        font-size: 42px;
+        font-weight: bold;
+        text-shadow: 0 4px 12px rgba(0,0,0,0.7);
+    }
+    nav {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        background: white;
+        padding: 15px 0;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        position: sticky;
+        top: 0;
+        z-index: 50;
+    }
+    nav a {
+        font-size: 18px;
+        text-decoration: none;
+        color: #006699;
+        font-weight: bold;
+        padding: 8px 16px;
+        border-radius: 6px;
+        transition: 0.2s;
+        cursor: pointer;
+    }
+    nav a:hover {
+        background: #fbf7c4eb;
+    }
+    .page {
+        display: none;
+        padding: 30px 50px;
+        max-width: 1100px;
+        margin: auto;
+    }
+    .active {
+        display: block;
+    }
+    h2 {
+        color: #00557a;
+        font-size: 28px;
+        margin-top: 10px;
+        border-left: 6px solid #fff56ae0;
+        padding-left: 14px;
+    }
+    .section-block {
+        background: white;
+        margin: 18px 0;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    .section-block:hover{
+        box-shadow: 0 0 10px #f9f19feb;
+        transform:scale(1.2);
+            transition: 1.7s;
+    }
+    .item-title {
+        font-size: 21.25px;
+        font-weight: bold;
+        color: #0077aa;
+        margin-bottom: 6px;
+    }
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 20px;
+    }
+    .img-box {
+        width: 100%;
+        border-radius: 10px;
+        height: 180px;
+        object-fit: cover;
+        margin-bottom: 12px;
+    }
+</style>
+</head>
+<body>
+
+<header></header>
+
+<nav>
+    <a onclick="showPage('home')">Trang Chủ</a>
+    <a onclick="showPage('tour')">Tour Du Lịch</a>
+    <a onclick="showPage('place')">Địa Điểm Nổi Bật</a>
+    <a onclick="showPage('food')">Ẩm Thực</a>
+    <a onclick="showPage('experience')">Kinh Nghiệm</a>
+    <a onclick="showPage('contact')">Liên Hệ</a>
+</nav>
+
+<!-- TRANG CHỦ -->
+<div id="home" class="page active">
+    <h2>Giới thiệu Sapa</h2>
+    <div class="section-block">
+    Sa Pa là thị trấn nghỉ mát nổi tiếng vùng cao Lào Cai, Việt Nam, được mệnh danh là "nàng thơ Tây Bắc" với cảnh quan núi non hùng vĩ, ruộng bậc thang xanh mướt và khí hậu mát mẻ quanh năm (cao 1.600m so với mực nước biển).<br>
+    -Thuộc tỉnh Lào Cai, cách thành phố Lào Cai 38km, nằm dưới chân dãy Hoàng Liên Sơn. <br>
+    -Độ cao trung bình 1.600m, tạo nên khí hậu mát mẻ, thường có mây mù. <br>
+    -Cận nhiệt đới gió mùa, mát mẻ quanh năm.<br>
+    -Mùa hè dễ chịu (20-25°C ban ngày), mùa đông lạnh, có sương mù, có thể có tuyết rơi.
+    </div>
+</div>
+    <!-- GÓC PHẢI: Nút Đăng nhập / Đăng ký -->
+<style>
+    .auth-buttons {
+        position: fixed;
+        top: 15px;
+        right: 25px;
+        display: flex;
+        gap: 10px;
+        z-index: 9999;
+    }
+    .auth-buttons button {
+        background-color: #0077b6;
+        border: none;
+        padding: 8px 14px;
+        color: white;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+    }
+    .auth-buttons button:hover {
+        opacity: 0.85;
+    }
+
+    /* POPUP */
+    .popup-bg {
+        display: none;
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: rgba(0,0,0,0.5);
+        justify-content: center;
+        align-items: center;
+        z-index: 10000;
+    }
+    .popup-box {
+        background: white;
+        width: 350px;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.3);
+        animation: fadeIn 0.2s ease;
+    }
+    @keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
+
+    .popup-box input {
+        width: 100%;
+        padding: 10px;
+        margin-top: 8px;
+        margin-bottom: 14px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+    }
+
+    .popup-box button {
+        width: 100%;
+        padding: 10px;
+        background: #0077b6;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+</style>
+
+<!-- NÚT -->
+<div class="auth-buttons">
+    <button onclick="openPopup('login')">Đăng nhập</button>
+    <button onclick="openPopup('register')">Đăng ký</button>
+</div>
+
+<!-- POPUP -->
+<div id="popup" class="popup-bg">
+    <div class="popup-box">
+        <h3 id="popup-title">Đăng nhập</h3>
+
+        <input type="email" id="email" placeholder="Email">
+
+        <!-- Trường chỉ hiện khi Đăng ký -->
+        <input type="text" id="username" placeholder="Tên đăng nhập" style="display:none;">
+        <input type="tel" id="phone" placeholder="Số điện thoại" style="display:none;">
+
+        <input type="password" id="password" placeholder="Mật khẩu">
+        <input type="password" id="password2" placeholder="Xác nhận mật khẩu" style="display:none;">
+
+        <button onclick="submitForm()">Xác nhận</button>
+        <p style="color:red; margin-top:10px;" id="error-msg"></p>
+    </div>
+</div>
+
+<script>
+    let mode = "login";
+
+    function openPopup(type) {
+        mode = type;
+        document.getElementById("popup-title").innerText =
+            type === "login" ? "Đăng nhập" : "Đăng ký tài khoản";
+
+        // Reset input
+        ["email","username","phone","password","password2"].forEach(id => {
+            document.getElementById(id).value = "";
+        });
+
+        // Reset lỗi
+        document.getElementById("error-msg").innerText = "";
+
+        // Ẩn/hiện các trường
+        const show = type === "register" ? "block" : "none";
+        document.getElementById("username").style.display = show;
+        document.getElementById("phone").style.display = show;
+        document.getElementById("password2").style.display = show;
+
+        // Mở popup
+        document.getElementById("popup").style.display = "flex";
+    }
+
+    // Click ra ngoài để đóng
+    window.onclick = function(e) {
+        if (e.target.id === "popup") {
+            document.getElementById("popup").style.display = "none";
+        }
+    }
+
+    function submitForm() {
+        const email = document.getElementById("email").value.trim();
+        const username = document.getElementById("username").value.trim();
+        const phone = document.getElementById("phone").value.trim();
+        const password = document.getElementById("password").value.trim();
+        const password2 = document.getElementById("password2").value.trim();
+
+        const error = document.getElementById("error-msg");
+
+        const emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;
+        const phoneRegex = /^[0-9]{9,11}$/;
+
+        if (!email || !password || (mode==="register" && (!username || !phone || !password2))) {
+            error.innerText = "Vui lòng nhập đầy đủ thông tin.";
+            return;
+        }
+
+        if (!emailRegex.test(email)) {
+            error.innerText = "Email không hợp lệ.";
+            return;
+        }
+
+        if (mode === "register" && !phoneRegex.test(phone)) {
+            error.innerText = "Số điện thoại không hợp lệ.";
+            return;
+        }
+
+        if (password.length < 6) {
+            error.innerText = "Mật khẩu phải có ít nhất 6 ký tự.";
+            return;
+        }
+
+        if (mode === "register" && password !== password2) {
+            error.innerText = "Mật khẩu xác nhận không khớp.";
+            return;
+        }
+
+        alert(mode === "login" ? "Đăng nhập thành công!" : "Đăng ký thành công!");
+        document.getElementById("popup").style.display = "none";
+    }
+</script>
+
+
+<!-- TOUR -->
+<div id="tour" class="page">
+    <h2>Tour Du Lịch Sapa</h2>
+
+    <div class="grid">
+        <div class="section-block">
+            <img src="https://static.vinwonders.com/production/map-of-sapa-banner.jpg" class="img-box">
+            <div class="item-title">Tour du lịch Sapa 3N2Đ</div>
+            - Giá: Từ 2.815.000 VNĐ/người<br>
+            - Lịch trình: Hà Nội - Sapa - Bản Cát Cát, Khởi hành: Hà Nội.<br>
+            <a href="https://www.bestprice.vn/tour/tour-sapa-3n2d-moana-fansipan-ban-cat-cat-1322.html">Đặt tour</a>
+        </div>
+
+        <div class="section-block">
+            <img src="https://static-images.vnncdn.net/files/publish/2022/10/30/everything-about-sapa-that-tourists-need-to-know-d971ae62cfcf4fb9b77853a5bc8e8d29.jpg" class="img-box">
+            <div class="item-title">Tour Sapa 2N1Đ </div>
+            - Giá: Từ 1.760.000 VNĐ/người<br>
+            - Lịch trình: Hà Nội - Sapa - Đỉnh Fansipan, Khởi hành: Hà Nội.<br>
+            <a href="https://www.bestprice.vn/tour/sapa-cat-cat-fansipan-2n1d-723.html">Đặt tour</a>
+        </div>
+
+        <div class="section-block">
+            <img src="https://impresstravel.com/wp-content/uploads/2021/03/Sapa-Trekking-Homestay-Market-16.jpg" class="img-box">
+            <div class="item-title">Tour Tây Bắc 5N5Đ</div>
+            - Giá: Từ 9.780.000 VNĐ/người<br>
+            - Lịch trình: Hồ Chí Minh - Sapa - Điện Biên - Sơn La - Mộc Châu, Khởi hành: Hồ Chí Minh.<br>
+            <a href="https://www.bestprice.vn/tour/tour-tay-bac-5-ngay-5-dem-tu-ho-chi-minh-1102.html">Đặt tour</a>
+        </div>
+    </div>
+</div>
+
+<!-- ĐỊA ĐIỂM DU LỊCH -->
+<div id="place" class="page">
+    <h2>Địa Điểm Du Lịch Nổi Bật</h2>
+
+    <div class="grid">
+        <div class="section-block">
+            <img class="img-box" src="https://ik.imagekit.io/tvlk/dam/i/01k3wz3thena6fv87dd2cj4kws.png?tr=q-70,c-at_max,w-1000,h-600" />
+            <div class="item-title"> Fansipan</div>
+            Fansipan được biết đến tên “Nóc nhà Đông Dương” với độ cao 3.143m, là điểm đến mơ ước của biết bao du khách.<br>
+            - Địa chỉ: Dãy Hoàng Liên Sơn, tỉnh Lào Cai<br>
+            - Giá vé tham quan: Cáp treo khoảng 750.000 VND/người lớn, 550.000 VND/trẻ em<br>
+            - <a href="https://kenh14.vn/fansipan-tuyet-tac-bi-an-tren-dinh-noc-nha-dong-duong-215251211072137142.chn">Chi tiết tại đây</a>
+        </div>
+
+        <div class="section-block">
+            <img class="img-box" src="https://ik.imagekit.io/tvlk/dam/i/01k3wz5m1rynpjqck2gwetvz39.png?tr=q-70,c-at_max,w-1000,h-600" />
+            <div class="item-title">Thung lũng Mường Hoa</div>
+            Thung lũng Mường Hoa nổi tiếng với những thửa ruộng bậc thang trải dài, đặc biệt rực rỡ vào mùa lúa chín từ tháng 9 đến tháng 10.<br>
+            - Địa chỉ: Cách trung tâm Sapa khoảng 8km về phía Đông Nam.<br>
+            - Giá vé tham quan: Chỉ từ 75.000 VND/ người.<br>
+            - <a href="https://vinwonders.com/vi/wonderpedia/news/thung-lung-muong-hoa-sa-pa-lao-cai/">Chi tiết tại đây</a>
+        </div>
+
+        <div class="section-block">
+            <img class="img-box" src="https://ik.imagekit.io/tvlk/dam/i/01k3wzeam1rp9v40e6c57f9bfv.png?tr=q-70,c-at_max,w-1000,h-600" />
+            <div class="item-title">Đèo Ô Quy Hồ</div>
+            Đèo Ô Quy Hồ, hay còn gọi là đèo Hoàng Liên, là một trong tứ đại đỉnh đèo nổi tiếng nhất Việt Nam. Với chiều dài gần 50km, đèo mang đến khung cảnh hùng vĩ với núi non trùng điệp, mây phủ trắng xóa quanh năm.<br>
+            - Địa chỉ: Quốc lộ 4D, nối liền Sapa (Lào Cai) và Tam Đường (Lai Châu).<br>
+            - <a href="https://mia.vn/cam-nang-du-lich/kham-pha-ve-dep-deo-o-quy-ho-mot-trong-tu-dai-dinh-deo-cua-viet-nam-500">Chi tiết tại đây</a>
+        </div>
+        <div class="section-block">
+            <img class="img-box" src="https://ik.imagekit.io/tvlk/dam/i/01k3x0j3exm2kjg1cwyfj7pp7p.png?tr=q-70,c-at_max,w-1000,h-600" />
+            <div class="item-title">Chợ đêm SaPa</div>
+            Chợ đêm Sapa là điểm hẹn lý tưởng để khám phá ẩm thực và văn hóa bản địa. Tại đây, bạn có thể thưởng thức các món nướng nóng hổi như thịt xiên, ngô, khoai, cá suối hay thắng cố. Không khí chợ đêm nhộn nhịp, rực rỡ ánh đèn khiến du khách cảm nhận rõ sự sôi động của phố núi.<br>
+            - Địa chỉ: Trung tâm thị trấn Sapa, gần Nhà thờ Đá, Giờ hoạt động: 18:00 - 23:00 hằng ngày <br>
+            - <a href="https://www.traveloka.com/vi-vn/explore/destination/cho-dem-sapa-acc/235731">Chi tiết tại đây</a>
+        </div>
+    </div>
+</div>
+
+<!-- ẨM THỰC -->
+<div id="food" class="page">
+    <h2>Những món ăn hấp dẫn tại Sapa không thể bỏ lỡ</h2>
+
+    <div class="grid">
+        <div class="section-block">
+            <img class="img-box" src="https://vnpay.vn/s1/statics.vnpay.vn/2023/8/00cha3g2by8mo1692193639747.jpg" />
+            <div class="item-title">Thịt trâu gác bếp</div>
+            Thịt trâu gác bếp không chỉ là đặc sản Sapa nổi tiếng mà còn được nhiều du khách mua về làm quà tặng bạn bè, người thân. <br>
+            - Gợi ý: Chợ đêm Sapa trên đường Điện Biên Phủ, Viet’s Farm: 26, Đồng Lợi, Sapa, Cơ sở A Thịnh: đường Cầu Mây, Sapa.<br>
+            - Mức giá: 300.000 đến 900.000 đồng/kg
+        </div>
+
+        <div class="section-block">
+            <img class="img-box" src="https://amthucvietnam365.vn/wp-content/uploads/2024/02/0z7p12jv1wx1692193791096.jpg" />
+            <div class="item-title">Cơm Lam Sapa</div>
+            Nổi tiếng với hình ảnh các thửa ruộng bậc thanh xanh mơn mởn trải dài từ đèo cao, không quá bất ngờ khi cơm lam góp mặt trong danh sách đặc sản Sapa trứ danh.<br>
+            - Gợi ý: The Hill Station Singnature Restaurant Sapa: 37, Fansipan, Sapa, Red Dao: 4B, Thác Bạc, Sapa, Cầu Mây: 92, Ngũ Chỉ Sơn, Sapa.<br>
+            - Mức giá: 5.000 – 8.000đ/ống .
+        </div>
+
+        <div class="section-block">
+            <img class="img-box" src="https://media.saodaily.com/storage/files/lethihong/2023/04/05/co4-16462049033122145977223-220404.jpg" />
+            <div class="item-title">Thắng cố</div>
+            Vi vu chợ tình hay chợ phiên, du khách dễ dàng tìm thấy một món đặc sản Sapa có cái tên khá lạ - thắng cố. Vi vu chợ tình hay chợ phiên, du khách dễ dàng tìm thấy một món đặc sản Sapa có cái tên khá lạ - thắng cố. <br>
+            - Gợi ý: A Quỳnh Sa Pa: 15, Thạch Sơn, Sa Pa, Hoa Đồng Tiền: 29, Cầu Mây, Sa Pa, Ngọc Cừ: Lương Khánh Thiện, P. Duyên Hải, Lào Cai.<br>
+        </div>
+    </div>
+</div>
+
+<!-- KINH NGHIỆM -->
+<div id="experience" class="page">
+    <h2>Kinh Nghiệm Du Lịch</h2>
+
+    <div class="section-block">
+        <div class="item-title">Lên Đồ</div>
+        Thời tiết Sapa thay đổi như chong chóng, lúc nắng lúc mưa, lúc nóng lúc lạnh. Vì vậy, hãy chuẩn bị áo ấm, khăn choàng và mũ len để bạn có thể thoải mái khám phá những quán ăn ngon mà không lo bị cảm lạnh nhé!
+    </div>
+
+    <div class="section-block">
+        <div class="item-title">Đặt Khách Sạn</div>
+        <p>Du khách có thể tìm thấy trên Sapa những nhà nghỉ bình dân cho đến khu nghỉ dưỡng cao cấp mang đẳng cấp quốc tế. Nếu muốn tiết kiệm chi phí, bạn có thể ở homestay. Nếu đi cùng công ty, gia đình có trẻ nhỏ thì lựa chọn tốt nhất cho bạn là khách sạn ở thị trấn Dương Đông, tiện tới các điểm tham quan và mua sắm.<br> </p>
+        Một số khách sạn 5 sao như Cat Cat Resort, SaPa Resort thường có giá trên 700.000 đồng một phòng mỗi ngày. Các khách sạn 3-4 sao giá từ 1.000.000 đến 4.500.000 đồng. Khách sạn 2 sao như SaPa Horizon Hotel, Botanic Hotel, Mường Thanh SaPa resort, Kim Hoa thường có giá 600.000 - 800.000 đồng.
+    </div>
+
+    <div class="section-block">
+        <div class="item-title">Thuê Xe Máy vi vu</div>
+        <p>Bạn muốn tự do khám phá những quán ăn ngon "ẩn mình" trong các bản làng xa xôi? Thuê xe máy chính là lựa chọn hoàn hảo! Bạn có thể dễ dàng tìm thấy những địa điểm ăn uống ngon - bổ - rẻ mà không phải phụ thuộc vào bất kỳ ai.<br></p>
+           
+    </div>
+</div>
+
+<!-- LIÊN HỆ -->
+<div id="contact" class="page">
+    <h2>Liên Hệ</h2>
+    <div class="section-block">
+        Hotline: 123456789<br>
+        Email: info@sapatravel.com<br>
+        Mọi câu hỏi và thắc mắc xin vui lòng liên hệ qua số hotline hoặc email trên. Chúng tôi luôn sẵn sàng hỗ trợ bạn 24/7.
+    </div>
+</div>
+
+<script>
+function showPage(pageId) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(pageId).classList.add('active');
+}
+</script>
+
+</body>
+</html>
