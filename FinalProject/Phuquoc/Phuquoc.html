@@ -122,7 +122,7 @@
     </p>
     </div>
 </div>
-    <!-- GÓC PHẢI: Nút Đăng nhập / Đăng ký -->
+<!-- GÓC PHẢI: Nút Đăng nhập / Đăng ký -->
 <style>
     .auth-buttons {
         position: fixed;
@@ -186,10 +186,19 @@
         border-radius: 6px;
         cursor: pointer;
     }
+    .user-greeting {
+    color: #000000; 
+    font-size: 22px; 
+    font-weight: 800;
+    margin-right: 15px; 
+    text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.4); 
+    display: inline-block; 
+    padding: 10px 0;
+}
 </style>
 
 <!-- NÚT -->
-<div class="auth-buttons">
+<div class="auth-buttons" id="auth-buttons-container" >
     <button onclick="openPopup('login')">Đăng nhập</button>
     <button onclick="openPopup('register')">Đăng ký</button>
 </div>
@@ -213,8 +222,54 @@
     </div>
 </div>
 
-<script>
+<script>    
     let mode = "login";
+
+    // --- LOGIC QUẢN LÝ DỮ LIỆU ---
+    function getStoredUsers() {
+        const usersJson = localStorage.getItem('registeredUsers');
+        return usersJson ? JSON.parse(usersJson) : [];
+    }
+
+    function saveUsers(users) {
+        localStorage.setItem('registeredUsers', JSON.stringify(users));
+    }
+
+    // 3. Cập nhật giao diện đăng nhập/đăng ký (ĐÃ SỬA Ở ĐÂY)
+    function updateAuthUI() {
+        const container = document.getElementById('auth-buttons-container');
+        const loggedInUserEmail = sessionStorage.getItem('loggedInUser');
+
+        if (loggedInUserEmail) {
+            // Đã đăng nhập: Hiển thị tên và nút Đăng xuất
+            const users = getStoredUsers();
+            const user = users.find(u => u.email === loggedInUserEmail);
+            const displayName = user ? user.username : loggedInUserEmail;
+
+            container.innerHTML = `
+                <span class="user-greeting">Chào, ${displayName}!</span> 
+                <button onclick="logout()">Đăng xuất</button>
+            `;
+        } else {
+            // Chưa đăng nhập: Hiển thị nút Đăng nhập/Đăng ký
+            container.innerHTML = `
+                <button onclick="openPopup('login')">Đăng nhập</button>
+                <button onclick="openPopup('register')">Đăng ký</button>
+            `;
+        }
+    }
+
+    // 4. Xử lý Đăng xuất
+    function logout() {
+        sessionStorage.removeItem('loggedInUser');
+        updateAuthUI();
+        alert("Bạn đã đăng xuất thành công.");
+    }
+    
+    // Gọi hàm này khi trang tải xong để kiểm tra trạng thái đăng nhập
+    window.onload = updateAuthUI;
+
+    // --- LOGIC POPUP & SUBMIT FORM ---
 
     function openPopup(type) {
         mode = type;
@@ -222,25 +277,32 @@
             type === "login" ? "Đăng nhập" : "Đăng ký tài khoản";
 
         // Reset input
-        ["email","username","phone","password","password2"].forEach(id => {
-            document.getElementById(id).value = "";
+        ["email", "username", "phone", "password", "password2"].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.value = "";
         });
 
         // Reset lỗi
-        document.getElementById("error-msg").innerText = "";
+        const error = document.getElementById("error-msg");
+        if (error) error.innerText = "";
 
         // Ẩn/hiện các trường
         const show = type === "register" ? "block" : "none";
-        document.getElementById("username").style.display = show;
-        document.getElementById("phone").style.display = show;
-        document.getElementById("password2").style.display = show;
+        const username = document.getElementById("username");
+        const phone = document.getElementById("phone");
+        const password2 = document.getElementById("password2");
+
+        if (username) username.style.display = show;
+        if (phone) phone.style.display = show;
+        if (password2) password2.style.display = show;
 
         // Mở popup
-        document.getElementById("popup").style.display = "flex";
+        const popup = document.getElementById("popup");
+        if (popup) popup.style.display = "flex";
     }
 
     // Click ra ngoài để đóng
-    window.onclick = function(e) {
+    window.onclick = function (e) {
         if (e.target.id === "popup") {
             document.getElementById("popup").style.display = "none";
         }
@@ -248,17 +310,19 @@
 
     function submitForm() {
         const email = document.getElementById("email").value.trim();
-        const username = document.getElementById("username").value.trim();
-        const phone = document.getElementById("phone").value.trim();
+        const username = document.getElementById("username") ? document.getElementById("username").value.trim() : '';
+        const phone = document.getElementById("phone") ? document.getElementById("phone").value.trim() : '';
         const password = document.getElementById("password").value.trim();
-        const password2 = document.getElementById("password2").value.trim();
+        const password2 = document.getElementById("password2") ? document.getElementById("password2").value.trim() : '';
 
         const error = document.getElementById("error-msg");
+        error.innerText = "";
 
-        const emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;
+        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
         const phoneRegex = /^[0-9]{9,11}$/;
 
-        if (!email || !password || (mode==="register" && (!username || !phone || !password2))) {
+        // --- VALIDATION ---
+        if (!email || !password || (mode === "register" && (!username || !phone || !password2))) {
             error.innerText = "Vui lòng nhập đầy đủ thông tin.";
             return;
         }
@@ -267,24 +331,55 @@
             error.innerText = "Email không hợp lệ.";
             return;
         }
-
-        if (mode === "register" && !phoneRegex.test(phone)) {
-            error.innerText = "Số điện thoại không hợp lệ.";
-            return;
-        }
-
+        
         if (password.length < 6) {
             error.innerText = "Mật khẩu phải có ít nhất 6 ký tự.";
             return;
         }
 
-        if (mode === "register" && password !== password2) {
-            error.innerText = "Mật khẩu xác nhận không khớp.";
-            return;
-        }
+        const users = getStoredUsers();
 
-        alert(mode === "login" ? "Đăng nhập thành công!" : "Đăng ký thành công!");
-        document.getElementById("popup").style.display = "none";
+        // --- LOGIC LƯU THÔNG TIN ---
+        if (mode === "register") {
+            if (!phoneRegex.test(phone)) {
+                error.innerText = "Số điện thoại không hợp lệ (9-11 chữ số).";
+                return;
+            }
+            if (password !== password2) {
+                error.innerText = "Mật khẩu xác nhận không khớp.";
+                return;
+            }
+            
+            // Kiểm tra email đã tồn tại chưa
+            if (users.some(user => user.email === email)) {
+                error.innerText = "Email này đã được đăng ký. Vui lòng chọn Đăng nhập.";
+                return;
+            }
+
+            // Lưu người dùng mới
+            const newUser = { email, username, phone, password };
+            users.push(newUser);
+            saveUsers(users);
+
+            alert("Đăng ký thành công! Bạn có thể Đăng nhập ngay.");
+            document.getElementById("popup").style.display = "none";
+
+        } else { // mode === "login"
+            // Tìm người dùng
+            const foundUser = users.find(user => user.email === email && user.password === password);
+
+            if (foundUser) {
+                // Lưu trạng thái đăng nhập
+                sessionStorage.setItem('loggedInUser', foundUser.email);
+
+                alert("Đăng nhập thành công!");
+                document.getElementById("popup").style.display = "none";
+                updateAuthUI(); // Cập nhật giao diện
+            } else {
+                error.innerText = "Email hoặc Mật khẩu không đúng.";
+                return;
+            }
+        }
     }
 </script>
 
