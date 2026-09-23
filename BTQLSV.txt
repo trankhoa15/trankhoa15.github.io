@@ -1,0 +1,5 @@
+﻿Build started at 4:24 CH...
+1>------ Build started: Project: BTTH02, Configuration: Debug Any CPU ------
+1>  BTTH02 -> C:\Users\MY COMPUTER\source\repos\BTTH02\BTTH02\bin\Debug\BTTH02.exe
+========== Build: 1 succeeded, 0 failed, 0 up-to-date, 0 skipped ==========
+========== Build completed at 4:24 CH and took 00,297 seconds ==========
